@@ -1,0 +1,11 @@
+# Properties in this file will be read when running in dev mode
+
+db.driver=org.h2.Driver
+db.url=jdbc:h2:tcp://localhost/comaprim
+db.user=
+db.password=
+
+#db.driver=com.mysql.jdbc.Driver
+#db.url=jdbc:mysql://192.168.56.101:3306/squeryl
+#db.user=jb
+#db.password=jb

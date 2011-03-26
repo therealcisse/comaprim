@@ -1,0 +1,9 @@
+*.lic
+.classpath
+.project
+*.iml
+.idea
+target/
+lib_managed/
+src_managed/
+project/boot/
