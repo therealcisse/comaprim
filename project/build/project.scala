@@ -67,8 +67,9 @@ class project(info: ProjectInfo) extends ParentProject(info) with IdeaProject {
   override def parallelExecution = true
     
   // Project Definitions
-  lazy val controlProducteursModel = project("control-producteurs-model", "control-producteurs-model", info => new ControlProducteursModel(info) with IdeaProject)
-  lazy val controlProducteurs      = project("control-producteurs-webapp", "control-producteurs-webapps", info => new ControlProducteursWebapp(info) with IdeaProject, controlProducteursModel)
+  lazy val controlProducteursServices = project("control-producteurs-services", "services", info => new ControlProducteursService(info) with IdeaProject)  
+  lazy val controlProducteursModel    = project("control-producteurs-model", "model", info => new ControlProducteursModel(info) with IdeaProject, controlProducteursServices)
+  lazy val controlProducteursWebapp   = project("control-producteurs-webapp", "webapp", info => new ControlProducteursWebapp(info) with IdeaProject, controlProducteursModel)
   
   class ControlProducteursModel(info: ProjectInfo) extends DefaultProject(info){    
     val specs2               = Dependencies.specs2
@@ -80,8 +81,19 @@ class project(info: ProjectInfo) extends ParentProject(info) with IdeaProject {
     val logback       = Dependencies.logback
     val logback_core  = Dependencies.logback_core
 
-    override def compileOptions = Unchecked :: super.compileOptions.toList
+    override def compileOptions = Deprecation :: Unchecked :: super.compileOptions.toList
   }  
+  
+  class ControlProducteursService(info: ProjectInfo) extends DefaultProject(info){    
+    val specs2               = Dependencies.specs2
+    val mockito              = Dependencies.mockito
+    
+    val slf4j         = Dependencies.slf4j
+    val logback       = Dependencies.logback
+    val logback_core  = Dependencies.logback_core
+
+    override def compileOptions = Deprecation :: Unchecked :: super.compileOptions.toList
+  }    
   
   class ControlProducteursWebapp(info: ProjectInfo) extends DefaultWebProject(info) with JRebelWebPlugin{
     val specs2              = Dependencies.specs2
@@ -102,6 +114,6 @@ class project(info: ProjectInfo) extends ParentProject(info) with IdeaProject {
     override def scanDirectories = Nil  
 
     override def compileOptions = Deprecation :: Unchecked :: super.compileOptions.toList
-  }      
+  }     
 }
 

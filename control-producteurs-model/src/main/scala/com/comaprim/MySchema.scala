@@ -50,7 +50,7 @@ object MySchema extends Schema {
     control.temperature defaultsTo BigDecimal(0),
     control.production defineAs indexed("control_production_index"),
     control.production defaultsTo BigDecimal(0),
-    control.`type` defineAs indexed("control_type_index"),
+    control.controlType defineAs indexed("control_type_index"),
     control.localPrice defineAs indexed("control_local_price"),
     control.localPrice defaultsTo BigDecimal(0),
     control.exportPrice defineAs indexed("control_export_price"),
@@ -85,24 +85,35 @@ object MySchema extends Schema {
    * Drops an old schema if exists and then creates
    * the new schema.
    */
-  def dropAndCreate {
+  def dropAndCreate() {
     drop
     create
   }
 
-  def createTestData {
+  def createTestData() {
+
     //create producers
 
-    val producers =
-      for(x <-  1 to 30) yield MySchema.producers.insert(Producer.createRecord.firstName("Producer:"+x).lastName("Producer:"+x))
+    //val producers =
+      //for(x <-  1 to 30) yield MySchema.producers.insert(Producer.createRecord.firstName("Producer:"+x).lastName("Producer:"+x))
 
     //create farms
 
-    val farms =
-      for(x <-  1 to 30) yield MySchema.farms.insert(Farm.createRecord.reference((x+2000L).toString).producerId(x))
+    //val farms =
+      //for(x <-  1 to 30) yield MySchema.farms.insert(Farm.createRecord.reference((x+2000L).toString).producerId(x))
 
     //create cultures
+
+    val cultures =
+      for(x <- 1 to 30) yield MySchema.cultures.insert(Culture.createRecord.designation("Culture:"+x))
+
     //create varieties
+
+    val aCulture = cultures.head
+
+    val varieties =
+      for(x <- 1 to 30) yield Assembly.varietyService.addVariety(aCulture, "Variety:"+x)//MySchema.varieties.insert(Variety.createRecord.name().cultureId(x))
+
     //create sectors
   }
 }

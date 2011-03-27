@@ -12,11 +12,13 @@ object DBHelper {
 
   def initSquerylRecord() {
     SquerylRecord.initWithSquerylSession {
-      Session.create(DriverManager.getConnection("jdbc:h2:tcp:localhost/comaprim;DB_CLOSE_DELAY=-1"), new H2Adapter)
+      val session = Session.create(DriverManager.getConnection("jdbc:h2:tcp:localhost/comaprim;DB_CLOSE_DELAY=-1"), new H2Adapter)
+      session.setLogger(println)
+      session
     }
   }
   
-  def main(args:Array[String]):Unit = {
+  def main(args:Array[String]) {
     initSquerylRecord()
     createSchema()
   }
@@ -29,8 +31,8 @@ object DBHelper {
     inTransaction {
     	try {
 	      //MySchema.printDdl
-	      MySchema.dropAndCreate
-	      MySchema.createTestData
+	      MySchema.dropAndCreate()
+	      MySchema.createTestData()
     	} catch {
     		case e => e.printStackTrace()
     		  throw e;

@@ -1,35 +1,29 @@
 package com.comaprim
 
-import service._
+import model.{VarietyAssembly, CultureAssembly, ProducerAssembly, SectorAssembly, FarmAssembly, ControlAssembly}
 
-object Assembly extends ProducerAssembly with FarmAssembly with SectorAssembly with CultureAssembly with VarietyAssembly with ControlAssembly
+object Assembly extends CultureAssembly
+                with VarietyAssembly
+                with ProducerAssembly
+                with SectorAssembly
+                with FarmAssembly
+                with ControlAssembly {
 
-trait ProducerAssembly extends ProducerServiceComponent with ProducerRepositoryComponent {
-  val producerRepository = null.asInstanceOf[ProducerRepository]
-  val producerService = new DefaultProducerService
-}
+  lazy val cultureRepository = new DefaultICultureRepository
+  lazy val cultureService    = new DefaultCultureService
 
-trait FarmAssembly extends FarmServiceComponent with FarmRepositoryComponent {
-  val farmRepository = null.asInstanceOf[FarmRepository]
-  val farmService = new DefaultFarmService
-}
+  lazy val producerRepository  = new DefaultProducerRepository
+  lazy val producerService     = new DefaultProducerService
 
-trait SectorAssembly extends SectorServiceComponent with SectorRepositoryComponent {
-  val sectorRepository = null.asInstanceOf[SectorRepository]
-  val sectorService = new DefaultSectorService
-}
+  lazy val sectorRepository  = new DefaultSectorRepository
+  lazy val sectorService     = new DefaultSectorService
 
-trait CultureAssembly extends CultureServiceComponent with CultureRepositoryComponent {
-  val cultureRepository = null.asInstanceOf[CultureRepository]
-  val cultureService = new DefaultCultureService
-}
+  lazy val farmRepository  = new DefaultFarmRepository
+  lazy val farmService     = new DefaultFarmService
 
-trait VarietyAssembly extends VarietyServiceComponent with VarietyRepositoryComponent {
-  val varietyRepository = null.asInstanceOf[VarietyRepository]
-  val varietyService = new DefaultVarietyService
-}
+  lazy val controlRepository = new DefaultControlRepository
+  lazy val controlService    = new DefaultControlService
 
-trait ControlAssembly extends ControlServiceComponent with ControlRepositoryComponent {
-  val controlRepository = null.asInstanceOf[ControlRepository]
-  val controlService = new DefaultControlService
+  lazy val varietyRepository = new DefaultVarietyRepository
+  lazy val varietyService    = new DefaultVarietyService
 }
