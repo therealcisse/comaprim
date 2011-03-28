@@ -23,7 +23,7 @@ class Variety extends Record[Variety] with KeyedRecord[Long]{
 
   lazy val valUniqueFindFunc:(String=>Boolean) =
       if(isPersisted)
-        (value:String) => (from(MySchema.varieties)(v => where(v.id <> id and v.name === value) select(v))).headOption.isDefined
+        (value:String) => headOption(from(MySchema.varieties)(v => where(v.id <> id and v.name === value) select(v))).isDefined
       else
         (value:String) => Assembly.varietyService.findVarietyByName(value).isDefined
 

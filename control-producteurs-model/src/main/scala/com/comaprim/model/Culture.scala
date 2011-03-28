@@ -18,7 +18,7 @@ class Culture private () extends Record[Culture] with KeyedRecord[Long]{
 
   lazy val valUniqueFindFunc:(String=>Boolean) =
     if(isPersisted)
-      (value:String) => (from(MySchema.cultures)(c => where(c.id <> id and (c.designation === /*setFilter is already ran here*/value)) select(c))).headOption.isDefined
+      (value:String) => headOption(from(MySchema.cultures)(c => where(c.id <> id and (c.designation === /*setFilter is already ran here*/value)) select(c))).isDefined
     else
       (value:String) => Assembly.cultureService.findCultureByDesignation(value).isDefined
 

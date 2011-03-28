@@ -21,7 +21,7 @@ class Farm private () extends Record[Farm] with KeyedRecord[Long] {
 
   lazy val valUniqueFindFunc:(String=>Boolean) =
       if(isPersisted)
-        (value:String) => (from(MySchema.farms)(f => where(f.id <> id and f.reference === value) select(f))).headOption.isDefined
+        (value:String) => headOption(from(MySchema.farms)(f => where(f.id <> id and f.reference === value) select(f))).isDefined
       else
         (value:String) => Assembly.farmService.findFarmByRef(value).isDefined
 

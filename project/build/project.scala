@@ -1,7 +1,7 @@
 import sbt._
-import fi.jawsy.sbtplugins.jrebel._
+import fi.jawsy.sbtplugins.jrebel.{JRebelJarPlugin, JRebelWebPlugin}
 
-class project(info: ProjectInfo) extends ParentProject(info) with IdeaProject {
+class project(info: ProjectInfo) extends ParentProject(info)  {
 
   //override def compileOptions = super.compileOptions :: Nil
 
@@ -67,11 +67,11 @@ class project(info: ProjectInfo) extends ParentProject(info) with IdeaProject {
   override def parallelExecution = true
     
   // Project Definitions
-  lazy val controlProducteursServices = project("control-producteurs-services", "services", info => new ControlProducteursService(info) with IdeaProject)  
-  lazy val controlProducteursModel    = project("control-producteurs-model", "model", info => new ControlProducteursModel(info) with IdeaProject, controlProducteursServices)
-  lazy val controlProducteursWebapp   = project("control-producteurs-webapp", "webapp", info => new ControlProducteursWebapp(info) with IdeaProject, controlProducteursModel)
+  lazy val controlProducteursServices = project("control-producteurs-services", "services", info => new ControlProducteursService(info) )  
+  lazy val controlProducteursModel    = project("control-producteurs-model", "model", info => new ControlProducteursModel(info) , controlProducteursServices)
+  lazy val controlProducteursWebapp   = project("control-producteurs-webapp", "webapp", info => new ControlProducteursWebapp(info) , controlProducteursModel)
   
-  class ControlProducteursModel(info: ProjectInfo) extends DefaultProject(info){    
+  class ControlProducteursModel(info: ProjectInfo) extends DefaultProject(info) with JRebelJarPlugin{    
     val specs2               = Dependencies.specs2
     val mockito              = Dependencies.mockito
     
@@ -84,13 +84,15 @@ class project(info: ProjectInfo) extends ParentProject(info) with IdeaProject {
     override def compileOptions = Deprecation :: Unchecked :: super.compileOptions.toList
   }  
   
-  class ControlProducteursService(info: ProjectInfo) extends DefaultProject(info){    
+  class ControlProducteursService(info: ProjectInfo) extends DefaultProject(info) with JRebelJarPlugin{    
     val specs2               = Dependencies.specs2
     val mockito              = Dependencies.mockito
     
     val slf4j         = Dependencies.slf4j
     val logback       = Dependencies.logback
     val logback_core  = Dependencies.logback_core
+    
+    override def packageRebelXml = true       
 
     override def compileOptions = Deprecation :: Unchecked :: super.compileOptions.toList
   }    

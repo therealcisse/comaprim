@@ -22,9 +22,9 @@ class Sector private () extends Record[Sector] with KeyedRecord[Long] {
 
   lazy val valUniqueFindFunc:(String=>Boolean) =
       if(isPersisted)
-        (value:String) => (from(MySchema.sectors)(s => where(s.id <> id and s.farmId === farmId and s.name === value) select(s))).headOption.isDefined
+        (value:String) => headOption(from(MySchema.sectors)(s => where(s.id <> id and s.farmId === farmId and s.name === value) select(s))).isDefined
       else
-        (value:String) => (from(MySchema.sectors)(s => where(s.farmId === farmId and s.name === value) select(s))).headOption.isDefined
+        (value:String) => headOption(from(MySchema.sectors)(s => where(s.farmId === farmId and s.name === value) select(s))).isDefined
 
   val name = new StringField(this, 30, "") {
     override lazy val validations = valUnique(valUniqueFindFunc, this, "sector name already exists in this farm") _ :: super.validations
