@@ -48,8 +48,6 @@
         <dependency>
             <groupId>com.comaprim</groupId>
             <artifactId>model</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
         </dependency>
 
           <dependency>

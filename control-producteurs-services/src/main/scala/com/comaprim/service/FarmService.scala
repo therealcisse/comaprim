@@ -5,7 +5,7 @@ trait FarmRepositoryComponent {
   val farmRepository: FarmRepository
 
   trait FarmRepository {
-    def addFarm(producer:IProducer, reference:String, description:String=""):IFarm
+    def addFarm(producer:IProducer, reference:String, description:Option[String]=None):IFarm
     def removeFarm(id:String)
     def changeFarm(farm:IFarm):IFarm
     def findFarm(id: String):Option[IFarm]
@@ -16,7 +16,7 @@ trait FarmRepositoryComponent {
 }
 
 trait FarmService {
-  def addFarm(producer:IProducer, reference:String, description:String=""):IFarm
+  def addFarm(producer:IProducer, reference:String, description:Option[String]=None):IFarm
   def removeFarm(id:String)
   def changeFarm(farm:IFarm):IFarm
   def findFarm(id: String):Option[IFarm]
@@ -29,7 +29,7 @@ trait FarmServiceComponent { self: FarmRepositoryComponent =>
   val farmService: FarmService
 
   class DefaultFarmService extends FarmService {
-    def addFarm(producer:IProducer, reference:String, description:String="") = farmRepository.addFarm(producer, reference, description)
+    def addFarm(producer:IProducer, reference:String, description:Option[String]=None) = farmRepository.addFarm(producer, reference, description)
     def removeFarm(id:String)  { farmRepository.removeFarm(id) }
     def changeFarm(farm:IFarm) = farmRepository.changeFarm(farm)
     def findFarmByRef(reference:String) = farmRepository.findFarmByRef(reference)

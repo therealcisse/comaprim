@@ -14,7 +14,7 @@ object MySchema extends Schema {
   val controls    = table[Control]
 
   on(producers)(producer => declare(
-    producer.firstName defineAs indexed("producer_firstname_index"),
+    producer.firstName defineAs (unique, indexed("producer_firstname_index")),
     producer.firstName defineAs indexed("farm_lastname_index"),
     producer.created defineAs indexed("producer_created_index"),
     producer.updated defineAs indexed("producer_updated_index")

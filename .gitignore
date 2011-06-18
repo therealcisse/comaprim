@@ -3,6 +3,8 @@
 .classpath
 .project
 *.iml
+*.ipr
+*.iws
 .idea
 target/
 lib_managed/

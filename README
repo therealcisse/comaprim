@@ -1,6 +1,16 @@
 
 TODO:
 
-add validation
-use Lift markdown Parser for descriptions
-default value for datetime fields
+-- add validation
+-- use Lift markdown Parser for descriptions
+--- default value for datetime fields
+--- add clean utilities from jb
+--- make updated == created at creation time, good for sorting
+--- make def = val in models
+test
+make farm.reference long
+type encoding
+rest api
+find shouldn't have runFilters
+
+maybe equals n hashcode in types

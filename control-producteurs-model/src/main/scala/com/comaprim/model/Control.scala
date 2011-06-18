@@ -1,12 +1,12 @@
 package com.comaprim
 package model
 
-import org.squeryl.annotations.Column
+import _root_.org.squeryl.annotations.Column
 
-import net.liftweb.squerylrecord.RecordTypeMode._
-import net.liftweb.squerylrecord._
-import net.liftweb.record.field._
-import net.liftweb.record.{MetaRecord, Record}
+import _root_.net.liftweb.squerylrecord.RecordTypeMode._
+import _root_.net.liftweb.squerylrecord._
+import _root_.net.liftweb.record.field._
+import _root_.net.liftweb.record.{MetaRecord, Record}
 
 import service.{IControl, IProducer, ICulture, ControlType}
 
@@ -28,15 +28,35 @@ class Control private () extends Record[Control] with KeyedRecord[Long] {
 
 object Control extends Control with MetaRecord[Control] {
 
-  def addControl(producer:IProducer, culture:ICulture, production:Double, temperature:Double, localPrice:Double, exportPrice:Double, controlType:ControlType.Value=ControlType.Unknown, date:java.util.Calendar) = MySchema.controls.insert(Control.createRecord.producerId(producer.id).cultureId(culture.id).production(production).temperature(temperature).controlType(controlType).localPrice(localPrice).exportPrice(exportPrice).date(date))
+  def addControl(
+        producer:IProducer,
+        culture:ICulture,
+        production:Double,
+        temperature:Double,
+        localPrice:Double,
+        exportPrice:Double,
+        controlType:ControlType.Value=ControlType.Unknown,
+        date:java.util.Calendar) = {
+    val ret = Control.createRecord
+                     .producerId(producer.id)
+                     .cultureId(culture.id)
+                     .production(production)
+                     .temperature(temperature)
+                     .controlType(controlType)
+                     .localPrice(localPrice)
+                     .exportPrice(exportPrice)
+                     .date(date)
+
+    doValidate(ret, MySchema.controls.insert(ret))
+  }
   def removeControl(id:Long) { MySchema.controls.deleteWhere(_.id === id) }
   def findControl(id:Long) = MySchema.controls.lookup(id)
   def getControls = MySchema.controls.toList
-  def getControls(producer:Option[IProducer]=None, culture:Option[ICulture]=None) = from(MySchema.controls)(control => where(control.producerId === producer.map(_.id).? and control.cultureId === culture.map(_.id).?) select(control)).toList
+  def getControls(producer:Option[IProducer]=None, culture:Option[ICulture]=None) = from(MySchema.controls)(control => where(control.producerId === producer.map(p=>toLong(p.id)).? and control.cultureId === culture.map(p=>toLong(p.id)).?) select(control)).toList
   
   implicit def toIControl(control:Control):IControl =
     new IControl {
-      val id = control.id
+      val id = control.id.toString
       val temperature = control.temperature.is
       val production = control.production.is
       //val controlType = control.controlType.is
@@ -44,8 +64,8 @@ object Control extends Control with MetaRecord[Control] {
       val exportPrice = control.exportPrice.is
       val date = control.date.is
 
-      val producerId = control.producerId.is
-      val cultureId = control.cultureId.is
+      val producerId = control.producerId.is.toString
+      val cultureId = control.cultureId.is.toString
     }  
 }
 
